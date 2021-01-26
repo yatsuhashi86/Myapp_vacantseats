@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">vacantseats</string>
+    <string name="start">出発駅</string>
+    <string name="nyuuryoku">入力してください</string>
+    <string name="starttwo">出発</string>
+    <string name="toutyaku">到着</string>
+    <string name="zero">0</string>
+    <string name="time">時</string>
+    <string name="hun">分</string>
+    <string name="sita">↓</string>
+    <string name="arriveSta">到着駅</string>
+    <string name="search">検索</string>
+</resources>
