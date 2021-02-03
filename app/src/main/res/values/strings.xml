@@ -10,4 +10,5 @@
     <string name="sita">↓</string>
     <string name="arriveSta">到着駅</string>
     <string name="search">検索</string>
+    <string name="back">←戻る</string>
 </resources>
