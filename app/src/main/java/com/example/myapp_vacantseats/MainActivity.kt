@@ -15,7 +15,11 @@ class MainActivity : AppCompatActivity() {
         var syuppatuSta = emptyArray<String>()
         var toutyakuSta = emptyArray<String>()
         val koubeSubwayKaiganToEast = MutableList(100){ MutableList(10){ -1 } }
-        fun readCsv(filename: String, list: MutableList<MutableList<Int>>){
+        fun readCsv(filename: String){
+            data class Station(
+                val name: String,
+                val departureTimes: List<Int>
+            )
             try{
                 val file = resources.assets.open(filename)
                 val fileReader = BufferedReader(InputStreamReader(file))
@@ -27,8 +31,9 @@ class MainActivity : AppCompatActivity() {
                         } else if (i == 1){
                             toutyakuSta = it.split(",").toTypedArray()
                         } else {
-                            val line = it.split(",").map { it.toInt() }.toMutableList()
-                            list[i] = line
+                            val line = it.split(",")
+                            val useLine = line.map { it.toInt() }.drop(1)
+                            val x = Station(name = line[0], departureTimes = useLine)
                         }
                     }
                     i++
