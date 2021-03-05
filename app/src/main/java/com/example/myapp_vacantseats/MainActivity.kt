@@ -8,35 +8,57 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+data class StationInfo(
+    val name: String,
+    val departureTimes: List<Int>
+)
+
+
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var syuppatuSta = emptyArray<String>()
         var toutyakuSta = emptyArray<String>()
-        val koubeSubwayKaiganToEast = MutableList(100){ MutableList(10){ -1 } }
-        fun readCsv(filename: String, list: MutableList<MutableList<Int>>){
-            try{
-                val file = resources.assets.open(filename)
-                val fileReader = BufferedReader(InputStreamReader(file))
-                var i = 0
-                fileReader.forEachLine {
-                    if (it.isNotBlank()){
-                        if (i == 0){
-                            syuppatuSta = it.split(",").toTypedArray()
-                        } else if (i == 1){
-                            toutyakuSta = it.split(",").toTypedArray()
-                        } else {
-                            val line = it.split(",").map { it.toInt() }.toMutableList()
-                            list[i] = line
-                        }
-                    }
-                    i++
-                }
-            } catch (e: IOException){
-                println(e)
-            }
 
+        val kobeSubwayKaiganToEast: MutableList<StationInfo> = mutableListOf()
+
+
+
+    }
+
+
+
+    fun readCsv(filename: String, list: MutableList<StationInfo>, syuppatuSta: MutableList<String>, toutyakuSta: MutableList<String>){
+        try{
+            val file = resources.assets.open(filename)
+            val fileReader = BufferedReader(InputStreamReader(file))
+            var i = 0
+            fileReader.forEachLine {
+                if (it.isNotBlank()){
+                    if (i == 0){
+                        val x = it.split(",").toTypedArray()
+                        x.forEach {
+                            syuppatuSta.add(it)
+                        }
+                    } else if (i == 1){
+                        val x = it.split(",").toTypedArray()
+                        x.forEach {
+                            toutyakuSta.add(it)
+                        }
+                    } else {
+                        val line = it.split(",")
+                        val x = line[0]
+                        val y = line.drop(1).map { it.toInt() }
+                        val addInfo = StationInfo(name = x, departureTimes = y)
+                        list.add(addInfo)
+                    }
+                }
+                i++
+            }
+        } catch (e: IOException){
+            println(e)
         }
 
     }
