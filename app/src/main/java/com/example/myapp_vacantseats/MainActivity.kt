@@ -63,36 +63,7 @@ class MainActivity : AppCompatActivity() {
         kobeSubwaySeishinToWestWeekdays = kariList
 
 
-        val currentSta = enterStartSta.text.toString()
-        val arriveSta = enterEndSta.text.toString()
-        val hour = jikann.text.toString().toInt()
-        val minute = hun.text.toString().toInt()
 
-        //海岸線を0、西神線を1にする
-        var currentLine = -1
-        var arriveLine = -1
-        //駅番号をインデックス番号にする
-        var currentStaNo = -1
-        var arriveStaNo = -1
-
-        val staKaiganList = mutableListOf("新長田", "駒ヶ林", "苅藻", "御崎公園", "和田岬", "中央市場前", "ハーバーランド", "みなと元町", "旧居留地・大丸前", "三宮・花時計前")
-        val staSeisinList = mutableListOf("西神中央", "西神南", "伊川谷", "学園都市", "総合運動公園", "名谷", "妙法寺", "板宿", "新長田", "長田", "上沢", "湊川公園", "大倉山", "県庁前", "三宮", "新神戸", "谷上")
-
-        if (staKaiganList.contains(currentSta)){
-            currentLine = 0
-            currentStaNo = staKaiganList.indexOf(currentSta)
-        } else if (staSeisinList.contains(currentSta)){
-            currentLine = 1
-            currentStaNo = staSeisinList.indexOf(currentSta)
-        }
-
-        if (staKaiganList.contains(arriveSta)){
-            arriveLine = 0
-            currentStaNo = staKaiganList.indexOf(arriveSta)
-        } else if (staSeisinList.contains(arriveSta)){
-            arriveLine = 1
-            currentStaNo = staSeisinList.indexOf(arriveSta)
-        }
 
 
 
@@ -139,6 +110,39 @@ class MainActivity : AppCompatActivity() {
             println(e)
         }
 
+    }
+
+    fun getInf(){
+        val currentSta = enterStartSta.text.toString()
+        val arriveSta = enterEndSta.text.toString()
+        val hour = jikann.text.toString().toInt()
+        val minute = hun.text.toString().toInt()
+
+        //海岸線を0、西神線を1にする
+        var currentLine = -1
+        var arriveLine = -1
+        //駅番号をインデックス番号にする
+        var currentStaNo = -1
+        var arriveStaNo = -1
+
+        val staKaiganList = mutableListOf("新長田", "駒ヶ林", "苅藻", "御崎公園", "和田岬", "中央市場前", "ハーバーランド", "みなと元町", "旧居留地・大丸前", "三宮・花時計前")
+        val staSeisinList = mutableListOf("西神中央", "西神南", "伊川谷", "学園都市", "総合運動公園", "名谷", "妙法寺", "板宿", "新長田", "長田", "上沢", "湊川公園", "大倉山", "県庁前", "三宮", "新神戸", "谷上")
+
+        if (staKaiganList.contains(currentSta)){
+            currentLine = 0
+            currentStaNo = staKaiganList.indexOf(currentSta)
+        } else if (staSeisinList.contains(currentSta)){
+            currentLine = 1
+            currentStaNo = staSeisinList.indexOf(currentSta)
+        }
+
+        if (staKaiganList.contains(arriveSta)){
+            arriveLine = 0
+            currentStaNo = staKaiganList.indexOf(arriveSta)
+        } else if (staSeisinList.contains(arriveSta)){
+            arriveLine = 1
+            currentStaNo = staSeisinList.indexOf(arriveSta)
+        }
     }
 
 
