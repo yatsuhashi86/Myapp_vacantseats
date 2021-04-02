@@ -3,6 +3,7 @@ package com.example.myapp_vacantseats
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
@@ -16,7 +17,7 @@ data class StationInfo(
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     var kariList: MutableList<StationInfo> = mutableListOf()
     var kariSyuppatuSta: MutableList<String> = mutableListOf()
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
 
 
 
@@ -63,6 +64,9 @@ class MainActivity : AppCompatActivity() {
         kobeSubwaySeishinToWestWeekdays = kariList
 
 
+        var buttonSearch = findViewById<Button>(R.id.searchStart)
+        buttonSearch.setOnClickListener(this)
+
 
 
 
@@ -73,6 +77,17 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    //ここに「検索」ボタンを押されたときの処理を書く
+    //画面遷移のコードもここになるはず
+    override fun onClick(v: View){
+
+
+        val a = getInf()
+
+
+    }
+
 
     //路線データのcsvをkariListにつっこんで行く関数
     fun readCsv(filename: String){
@@ -112,6 +127,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    //入力されたデータを取得する関数
     fun getInf(){
         val currentSta = enterStartSta.text.toString()
         val arriveSta = enterEndSta.text.toString()
