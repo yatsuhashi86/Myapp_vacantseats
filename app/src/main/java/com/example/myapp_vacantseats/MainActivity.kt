@@ -26,10 +26,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
-
-
         //海岸線の時刻表データ
         var kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = mutableListOf()
         var kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = mutableListOf()
@@ -81,8 +77,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     //ここに「検索」ボタンを押されたときの処理を書く
     //画面遷移のコードもここになるはず
     override fun onClick(v: View){
-
-
         val a = getInf()
 
 
@@ -129,7 +123,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     //入力されたデータを取得する関数
-    fun getInf(){
+    fun getInf(): List<Int> {
         val currentSta = enterStartSta.text.toString()
         val arriveSta = enterEndSta.text.toString()
         val hour = jikann.text.toString().toInt()
@@ -160,6 +154,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             arriveLine = 1
             currentStaNo = staSeisinList.indexOf(arriveSta)
         }
+        val usersInfo = listOf(currentLine, arriveLine, currentStaNo, arriveStaNo)
+
+        return usersInfo
     }
 
 
