@@ -15,6 +15,15 @@ data class StationInfo(
     val departureTimes: List<Int>
 )
 
+data class usersInfo(
+    val timeOfHour: Int,
+    val timeOfMinutes: Int,
+    val currentStaNo: Int,
+    val arriveStaNo: Int,
+    val currentLineNo: Int,
+    val arriveLineNo: Int
+)
+
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -27,64 +36,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         //海岸線の時刻表データ
-        var kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwayKaiganToWestWeekdays: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwayKaiganToWestWeekends: MutableList<StationInfo> = mutableListOf()
+        var kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_east.csv")
+        var kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_east.csv")
+        var kobeSubwayKaiganToWestWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_west.csv")
+        var kobeSubwayKaiganToWestWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_west.csv")
 
         //西神線の時刻表データ
-        var kobeSubwaySeishinToEastWeekdays: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwaySeishinToEastWeekends: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwaySeishinToWestWeekdays: MutableList<StationInfo> = mutableListOf()
-        var kobeSubwaySeishinToWestWeekends: MutableList<StationInfo> = mutableListOf()
-
-        //海岸線の週末ダイヤの時刻表データを入れた。hが週末なので注意
-        readCsv("open_kaigan_h_east.csv")
-        kobeSubwayKaiganToEastWeekends = kariList
-        //海岸線の全データを入れた
-        readCsv("open_kaigan_h_west.csv")
-        kobeSubwayKaiganToWestWeekends = kariList
-        readCsv("open_kaigan_w_east.csv")
-        kobeSubwayKaiganToEastWeekdays = kariList
-        readCsv("open_kaigan_w_west.csv")
-        kobeSubwayKaiganToWestWeekdays = kariList
-
-        //西神線の全時刻表データを入れた
-        readCsv("open_seishin_h_east.csv")
-        kobeSubwaySeishinToEastWeekends = kariList
-        readCsv("open_seishin_h_west.csv")
-        kobeSubwaySeishinToWestWeekends = kariList
-        readCsv("open_seishin_w_east.csv")
-        kobeSubwaySeishinToEastWeekdays = kariList
-        readCsv("open_seishin_w_west.csv")
-        kobeSubwaySeishinToWestWeekdays = kariList
+        var kobeSubwaySeishinToEastWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_east.csv")
+        var kobeSubwaySeishinToEastWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_east.csv")
+        var kobeSubwaySeishinToWestWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_west.csv")
+        var kobeSubwaySeishinToWestWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_west.csv")
 
 
         var buttonSearch = findViewById<Button>(R.id.searchStart)
         buttonSearch.setOnClickListener(this)
-
-
-
-
-
-
-
-
-
 
     }
 
     //ここに「検索」ボタンを押されたときの処理を書く
     //画面遷移のコードもここになるはず
     override fun onClick(v: View){
-        val a = getInf()
+        val a = getInfo()
 
 
     }
 
 
     //路線データのcsvをkariListにつっこんで行く関数
-    fun readCsv(filename: String){
+    fun readCsv(filename: String): MutableList<StationInfo> {
         kariList = mutableListOf()
         kariSyuppatuSta = mutableListOf()
         kariToutyakuSta = mutableListOf()
@@ -119,11 +98,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             println(e)
         }
 
+        return kariList
+
     }
 
 
     //入力されたデータを取得する関数
-    fun getInf(): List<Int> {
+    fun getInfo(): List<Int> {
         val currentSta = enterStartSta.text.toString()
         val arriveSta = enterEndSta.text.toString()
         val hour = jikann.text.toString().toInt()
@@ -154,7 +135,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             arriveLine = 1
             currentStaNo = staSeisinList.indexOf(arriveSta)
         }
-        val usersInfo = listOf(currentLine, arriveLine, currentStaNo, arriveStaNo)
+        val usersInfo = listOf(currentLine, arriveLine, currentStaNo, arriveStaNo, hour, minute)
 
         return usersInfo
     }
