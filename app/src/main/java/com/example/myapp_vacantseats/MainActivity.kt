@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val prRequest_practice_youni_nanika_code_kaerudake = 0
+
         //海岸線の時刻表データ
         var kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_east.csv")
         var kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_east.csv")
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     }
+
+
 
 
     //路線データのcsvをkariListにつっこんで行く関数
