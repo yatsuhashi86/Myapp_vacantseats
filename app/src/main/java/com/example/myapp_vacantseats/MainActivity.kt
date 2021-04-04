@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     //入力されたデータを取得する関数
-    fun getInfo(): List<Int> {
+    fun getInfo(): usersInfo {
         val currentSta = enterStartSta.text.toString()
         val arriveSta = enterEndSta.text.toString()
         val hour = jikann.text.toString().toInt()
@@ -131,9 +131,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             arriveLine = 1
             currentStaNo = staSeisinList.indexOf(arriveSta)
         }
-        val usersInfo = listOf(currentLine, arriveLine, currentStaNo, arriveStaNo, hour, minute)
 
-        return usersInfo
+        val returnInfo = usersInfo(
+            timeOfHour = hour,
+            timeOfMinutes = minute,
+            currentStaNo = currentStaNo,
+            arriveStaNo = arriveStaNo,
+            currentLineNo = currentLine,
+            arriveLineNo = arriveLine
+        )
+
+        return returnInfo
+
     }
 
 
