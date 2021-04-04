@@ -28,10 +28,6 @@ data class usersInfo(
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    var kariList: MutableList<StationInfo> = mutableListOf()
-    var kariSyuppatuSta: MutableList<String> = mutableListOf()
-    var kariToutyakuSta: MutableList<String> = mutableListOf()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,9 +60,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     //路線データのcsvをkariListにつっこんで行く関数
     fun readCsv(filename: String): MutableList<StationInfo> {
-        kariList = mutableListOf()
-        kariSyuppatuSta = mutableListOf()
-        kariToutyakuSta = mutableListOf()
+        var kariList = mutableListOf<StationInfo>()
+        var kariSyuppatuSta = mutableListOf<String>()
+        val kariToutyakuSta = mutableListOf<String>()
         try{
             val file = resources.assets.open(filename)
             val fileReader = BufferedReader(InputStreamReader(file))
