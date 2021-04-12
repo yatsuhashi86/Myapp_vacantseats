@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             currentStaNo = staKaiganList.indexOf(currentSta)
         } else if (staSeisinList.contains(currentSta)) {
             currentLine = 1
-            currentStaNo = staSeisinList.indexOf(currentSta)
+            arriveStaNo = staSeisinList.indexOf(currentSta)
         }
 
         if (staKaiganList.contains(arriveSta)) {
