@@ -54,38 +54,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     //路線データのcsvをkariListにつっこんで行く関数
     fun readCsv(filename: String): MutableList<StationInfo> {
-        var kariList = mutableListOf<StationInfo>()
-        var kariSyuppatuSta = mutableListOf<String>()
+        val kariList = mutableListOf<StationInfo>()
+        val kariSyuppatuSta = mutableListOf<String>()
         val kariToutyakuSta = mutableListOf<String>()
-        try {
-            val file = resources.assets.open(filename)
-            val fileReader = BufferedReader(InputStreamReader(file))
-            var i = 0
-            fileReader.forEachLine {
-                if (it.isNotBlank()) {
-                    if (i == 0) {
-                        val x = it.split(",").toTypedArray()
-                        x.forEach {
-                            kariSyuppatuSta.add(it)
-                        }
-                    } else if (i == 1) {
-                        val x = it.split(",").toTypedArray()
-                        x.forEach {
-                            kariToutyakuSta.add(it)
-                        }
-                    } else {
-                        val line = it.split(",")
-                        val x = line[0]
-                        val y = line.drop(1).map { it.toInt() }
-                        val addInfo = StationInfo(name = x, departureTimes = y)
-                        kariList.add(addInfo)
-                    }
-                }
-                i++
-            }
 
+        try {
+            val fileReader = BufferedReader(InputStreamReader(resources.assets.open(filename)))
+            fileReader.readLine()!!.split(",").forEach { kariSyuppatuSta.add(it) }
+            fileReader.readLine()!!.split(",").forEach { kariToutyakuSta.add(it) }
+            fileReader.forEachLine { line ->
+                val split = line.split(",")
+                kariList.add(StationInfo(
+                    name = split[0],
+                    departureTimes = split.drop(1).map { it.toInt() }
+                ))
+            }
         } catch (e: IOException) {
-            println(e)
+            e.printStackTrace()
         }
 
         return kariList
