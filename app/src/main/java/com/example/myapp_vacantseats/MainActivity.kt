@@ -98,15 +98,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             currentStaNo = staKaiganList.indexOf(currentSta)
         } else if (staSeisinList.contains(currentSta)) {
             currentLine = 1
-            arriveStaNo = staSeisinList.indexOf(currentSta)
+            currentStaNo = staSeisinList.indexOf(currentSta)
         }
 
         if (staKaiganList.contains(arriveSta)) {
             arriveLine = 0
-            currentStaNo = staKaiganList.indexOf(arriveSta)
+            arriveStaNo = staKaiganList.indexOf(arriveSta)
         } else if (staSeisinList.contains(arriveSta)) {
             arriveLine = 1
-            currentStaNo = staSeisinList.indexOf(arriveSta)
+            arriveStaNo = staSeisinList.indexOf(arriveSta)
         }
 
         val returnInfo = usersInfo(
