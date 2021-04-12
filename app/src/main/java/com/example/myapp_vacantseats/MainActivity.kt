@@ -93,20 +93,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val staKaiganList = mutableListOf("新長田", "駒ヶ林", "苅藻", "御崎公園", "和田岬", "中央市場前", "ハーバーランド", "みなと元町", "旧居留地・大丸前", "三宮・花時計前")
         val staSeisinList = mutableListOf("西神中央", "西神南", "伊川谷", "学園都市", "総合運動公園", "名谷", "妙法寺", "板宿", "新長田", "長田", "上沢", "湊川公園", "大倉山", "県庁前", "三宮", "新神戸", "谷上")
 
-        if (staKaiganList.contains(currentSta)) {
+        if (currentSta in staKaiganList) {
             currentLine = 0
             currentStaNo = staKaiganList.indexOf(currentSta)
-        } else if (staSeisinList.contains(currentSta)) {
+        } else if (currentSta in staSeisinList) {
             currentLine = 1
             arriveStaNo = staSeisinList.indexOf(currentSta)
         }
 
-        if (staKaiganList.contains(arriveSta)) {
+        if (arriveSta in staKaiganList) {
             arriveLine = 0
-            currentStaNo = staKaiganList.indexOf(arriveSta)
-        } else if (staSeisinList.contains(arriveSta)) {
+            arriveStaNo = staKaiganList.indexOf(arriveSta)
+        } else if (arriveSta in staSeisinList) {
             arriveLine = 1
-            currentStaNo = staSeisinList.indexOf(arriveSta)
+            arriveStaNo = staSeisinList.indexOf(arriveSta)
         }
 
         val returnInfo = usersInfo(
