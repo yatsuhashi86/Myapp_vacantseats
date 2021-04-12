@@ -30,16 +30,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         //海岸線の時刻表データ
-        val kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_east.csv")
-        val kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_east.csv")
-        val kobeSubwayKaiganToWestWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_west.csv")
-        val kobeSubwayKaiganToWestWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_west.csv")
+        val kobeSubwayKaiganToEastWeekdays = readCsv("open_kaigan_w_east.csv")
+        val kobeSubwayKaiganToEastWeekends = readCsv("open_kaigan_h_east.csv")
+        val kobeSubwayKaiganToWestWeekdays = readCsv("open_kaigan_w_west.csv")
+        val kobeSubwayKaiganToWestWeekends = readCsv("open_kaigan_h_west.csv")
 
         //西神線の時刻表データ
-        val kobeSubwaySeishinToEastWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_east.csv")
-        val kobeSubwaySeishinToEastWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_east.csv")
-        val kobeSubwaySeishinToWestWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_west.csv")
-        val kobeSubwaySeishinToWestWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_west.csv")
+        val kobeSubwaySeishinToEastWeekdays = readCsv("open_seishin_w_east.csv")
+        val kobeSubwaySeishinToEastWeekends = readCsv("open_seishin_h_east.csv")
+        val kobeSubwaySeishinToWestWeekdays = readCsv("open_seishin_w_west.csv")
+        val kobeSubwaySeishinToWestWeekends = readCsv("open_seishin_h_west.csv")
 
         val buttonSearch = findViewById<Button>(R.id.searchStart)
         buttonSearch.setOnClickListener(this)
