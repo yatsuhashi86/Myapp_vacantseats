@@ -24,7 +24,7 @@ data class usersInfo(
     val arriveLineNo: Int
 )
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,15 +42,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val kobeSubwaySeishinToWestWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_west.csv")
 
         val buttonSearch = findViewById<Button>(R.id.searchStart)
-        buttonSearch.setOnClickListener(this)
+        buttonSearch.setOnClickListener{
+            //todo
+            //ここに画面遷移の実装をする
+
+        }
     }
 
-    //todo
-    //ここに「検索」ボタンを押されたときの処理を書く
-    //画面遷移のコードもここになるはず
-    override fun onClick(v: View) {
-        val a = getInfo()
-    }
+
 
     //路線データのcsvをkariListにつっこんで行く関数
     fun readCsv(filename: String): MutableList<StationInfo> {
