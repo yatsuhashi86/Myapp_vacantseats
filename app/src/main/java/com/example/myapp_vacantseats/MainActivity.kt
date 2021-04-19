@@ -35,16 +35,29 @@ class MainActivity : AppCompatActivity() {
         val kobeSubwayKaiganToWestWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_west.csv")
         val kobeSubwayKaiganToWestWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_west.csv")
 
+        val kaiganData = mutableListOf(kobeSubwayKaiganToEastWeekdays, kobeSubwayKaiganToEastWeekends, kobeSubwayKaiganToWestWeekdays, kobeSubwayKaiganToWestWeekends)
+
         //西神線の時刻表データ
         val kobeSubwaySeishinToEastWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_east.csv")
         val kobeSubwaySeishinToEastWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_east.csv")
         val kobeSubwaySeishinToWestWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_west.csv")
         val kobeSubwaySeishinToWestWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_west.csv")
 
+        val seishinData = mutableListOf(kobeSubwaySeishinToEastWeekdays, kobeSubwaySeishinToEastWeekends, kobeSubwaySeishinToWestWeekdays, kobeSubwaySeishinToWestWeekends)
+
+        val dataOfTimeTable = mutableListOf<MutableList<MutableList<StationInfo>>>()
+        dataOfTimeTable.add(kaiganData)
+        dataOfTimeTable.add(seishinData) //時刻表データを一つのlistに格納した。たぶんダメ。三次元配列になった。
+
         val buttonSearch = findViewById<Button>(R.id.searchStart)
         buttonSearch.setOnClickListener{
             //todo
             //ここに画面遷移の実装をする
+            val info = getInfo()
+            if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
+
+            }
+
 
         }
     }
