@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.time.DayOfWeek
 
 data class StationInfo(
     val name: String,
@@ -23,6 +26,8 @@ data class usersInfo(
     val currentLineNo: Int,
     val arriveLineNo: Int
 )
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,10 +54,43 @@ class MainActivity : AppCompatActivity() {
         dataOfTimeTable.add(kaiganData)
         dataOfTimeTable.add(seishinData) //時刻表データを一つのlistに格納した。たぶんダメ。三次元配列になった。
 
+        var isItArrive = -1
+        var whatDay = -1
+
+        fun onRadioButtonClicked(view: View) {
+            if (view is RadioButton) {
+                val checked = view.isChecked
+                when (view.getId()) {
+                    R.id.startTimeOfButton->
+                        if (checked) {
+                            isItArrive = 0
+                        }
+                    R.id.endTimeOfButton->
+                        if (checked) {
+                            isItArrive = 1
+                        }
+                    R.id.buttonOfWeekDay ->
+                        if (checked){
+                            whatDay = 0 //平日を0に
+                        }
+                    R.id.buttonOfWeekEnd ->
+                        if (checked){
+                            whatDay = 1 //土休日を1に
+                        }
+                }
+            }
+        }
+
+        val RadioButtonOfArriveOrCurrent = findViewById<RadioGroup>(R.id.arriveOrCurrent)
+        onRadioButtonClicked(RadioButtonOfArriveOrCurrent)
+        val RadioButtonOfWeelDayOrWeekEnd = findViewById<RadioGroup>(R.id.weekDayOrWeekEnd)
+        onRadioButtonClicked(RadioButtonOfWeelDayOrWeekEnd)
+
         val buttonSearch = findViewById<Button>(R.id.searchStart)
         buttonSearch.setOnClickListener{
             //todo
             //ここに画面遷移の実装をする
+            //たぶんアルゴリズムもここ
             val info = getInfo()
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
 
@@ -61,6 +99,8 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
+
 
 
 
@@ -95,6 +135,8 @@ class MainActivity : AppCompatActivity() {
         val hour = jikann.text.toString().toInt()
         val minute = hun.text.toString().toInt()
 
+
+
         //海岸線を0、西神線を1にする
         var currentLine = -1
         var arriveLine = -1
@@ -120,6 +162,12 @@ class MainActivity : AppCompatActivity() {
             arriveLine = 1
             arriveStaNo = staSeisinList.indexOf(arriveSta)
         }
+
+
+
+
+
+
 
         val returnInfo = usersInfo(
             timeOfHour = hour,

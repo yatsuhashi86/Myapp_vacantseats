@@ -11,4 +11,6 @@
     <string name="arriveSta">到着駅</string>
     <string name="search">検索</string>
     <string name="back">←戻る</string>
+    <string name="weekday">平日</string>
+    <string name="weekend">土日祝</string>
 </resources>
