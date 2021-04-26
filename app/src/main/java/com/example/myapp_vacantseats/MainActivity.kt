@@ -4,14 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.time.DayOfWeek
 
 data class StationInfo(
     val name: String,
@@ -56,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         var isItArrive = -1
         var whatDay = -1
+        var secondIndex = -1
 
         fun onRadioButtonClicked(view: View) {
             if (view is RadioButton) {
@@ -93,6 +92,17 @@ class MainActivity : AppCompatActivity() {
             //たぶんアルゴリズムもここ
             val info = getInfo()
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
+                if (whatDay == 0 && info.currentStaNo < info.arriveStaNo){
+                    secondIndex = 0
+                } else if (whatDay == 1 && info.currentStaNo < info.arriveStaNo){
+                    secondIndex = 1
+                } else if (whatDay == 0 && info.currentStaNo > info.arriveStaNo){
+                    secondIndex = 2
+                } else if (whatDay == 1 && info.currentStaNo > info.arriveStaNo){
+                    secondIndex = 3
+                }
+
+            } else { //ここは二路線のうちはこれでいいけど拡張したらダイクストラを使ったコードにする必要がある。
 
             }
 
@@ -105,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //路線データのcsvをkariListにつっこんで行く関数
-    fun readCsv(filename: String): MutableList<StationInfo> {
+    private fun readCsv(filename: String): MutableList<StationInfo> {
         val kariList = mutableListOf<StationInfo>()
         val kariSyuppatuSta = mutableListOf<String>()
         val kariToutyakuSta = mutableListOf<String>()
@@ -129,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //入力されたデータを取得する関数
-    fun getInfo(): usersInfo {
+    private fun getInfo(): usersInfo {
         val currentSta = enterStartSta.text.toString()
         val arriveSta = enterEndSta.text.toString()
         val hour = jikann.text.toString().toInt()
@@ -163,13 +173,7 @@ class MainActivity : AppCompatActivity() {
             arriveStaNo = staSeisinList.indexOf(arriveSta)
         }
 
-
-
-
-
-
-
-        val returnInfo = usersInfo(
+        return usersInfo(
             timeOfHour = hour,
             timeOfMinutes = minute,
             currentStaNo = currentStaNo,
@@ -177,7 +181,5 @@ class MainActivity : AppCompatActivity() {
             currentLineNo = currentLine,
             arriveLineNo = arriveLine
         )
-
-        return returnInfo
     }
 }
