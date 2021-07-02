@@ -25,6 +25,15 @@ data class usersInfo(
     val arriveLineNo: Int
 )
 
+//二画面目に持っていくデータを格納するdata classを作る
+data class secondScreenInfo (
+    val currentSta: String,
+    val arriveSta: String,
+    val currentTime: Int,
+    val arriveTime: Int,
+    val transferSta: MutableList<String>,
+    val useLine: MutableList<String>
+)
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //海岸線の時刻表データ
+        //dataOfTimeTableの最初のlistのindexは0
         val kobeSubwayKaiganToEastWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_east.csv")
         val kobeSubwayKaiganToEastWeekends: MutableList<StationInfo> = readCsv("open_kaigan_h_east.csv")
         val kobeSubwayKaiganToWestWeekdays: MutableList<StationInfo> = readCsv("open_kaigan_w_west.csv")
@@ -41,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         val kaiganData = mutableListOf(kobeSubwayKaiganToEastWeekdays, kobeSubwayKaiganToEastWeekends, kobeSubwayKaiganToWestWeekdays, kobeSubwayKaiganToWestWeekends)
 
         //西神線の時刻表データ
+        //dataOfTimeTableの最初のlistのindexは1
         val kobeSubwaySeishinToEastWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_east.csv")
         val kobeSubwaySeishinToEastWeekends: MutableList<StationInfo> = readCsv("open_seishin_h_east.csv")
         val kobeSubwaySeishinToWestWeekdays: MutableList<StationInfo> = readCsv("open_seishin_w_west.csv")
@@ -52,9 +63,9 @@ class MainActivity : AppCompatActivity() {
         dataOfTimeTable.add(kaiganData)
         dataOfTimeTable.add(seishinData) //時刻表データを一つのlistに格納した。たぶんダメ。三次元配列になった。
 
-        var isItArrive = -1
-        var whatDay = -1
-        var secondIndex = -1
+        var isItArrive = -1 //検索が出発時刻でのものか到着時刻のものなのか判定
+        var whatDay = -1 //平日か土休日か
+        var secondIndex = -1 //時刻表データの二つ目のListのindex
 
         fun onRadioButtonClicked(view: View) {
             if (view is RadioButton) {
@@ -82,8 +93,8 @@ class MainActivity : AppCompatActivity() {
 
         val RadioButtonOfArriveOrCurrent = findViewById<RadioGroup>(R.id.arriveOrCurrent)
         onRadioButtonClicked(RadioButtonOfArriveOrCurrent)
-        val RadioButtonOfWeelDayOrWeekEnd = findViewById<RadioGroup>(R.id.weekDayOrWeekEnd)
-        onRadioButtonClicked(RadioButtonOfWeelDayOrWeekEnd)
+        val RadioButtonOfWeekDayOrWeekEnd = findViewById<RadioGroup>(R.id.weekDayOrWeekEnd)
+        onRadioButtonClicked(RadioButtonOfWeekDayOrWeekEnd)
 
         val buttonSearch = findViewById<Button>(R.id.searchStart)
         buttonSearch.setOnClickListener{
@@ -91,24 +102,41 @@ class MainActivity : AppCompatActivity() {
             //ここに画面遷移の実装をする
             //たぶんアルゴリズムもここ
             val info = getInfo()
+            var secondIndex = -1
+                //どの時刻表データを使うかの選定
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
-                if (whatDay == 0 && info.currentStaNo < info.arriveStaNo){
-                    secondIndex = 0
-                } else if (whatDay == 1 && info.currentStaNo < info.arriveStaNo){
-                    secondIndex = 1
-                } else if (whatDay == 0 && info.currentStaNo > info.arriveStaNo){
-                    secondIndex = 2
-                } else if (whatDay == 1 && info.currentStaNo > info.arriveStaNo){
-                    secondIndex = 3
+                secondIndex = decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo)
+            } else {
+                //todo
+                //ここは二路線のうちはこれでいいけど拡張したらダイクストラを使ったコードにする必要がある。
+                if (info.currentLineNo == 0 && info.currentStaNo == 0){ //新長田駅は西神線でもあるから目的駅が西神線ならそっちにする
+                    secondIndex = decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo)
+                } else if (info.currentLineNo == 0){
+
                 }
-
-            } else { //ここは二路線のうちはこれでいいけど拡張したらダイクストラを使ったコードにする必要がある。
-
             }
+            //todo
+            //時間から最適な電車を探す
+
 
 
         }
     }
+
+    private fun decideSecondIndex(whatDay: Int, currentStaNo: Int, arriveStaNo: Int): Int {
+        var secondIndex = -1
+        if (whatDay == 0 && currentStaNo < arriveStaNo){
+            secondIndex = 0
+        } else if (whatDay == 1 && currentStaNo < arriveStaNo){
+            secondIndex = 1
+        } else if (whatDay == 0 && currentStaNo > arriveStaNo){
+            secondIndex = 2
+        } else if (whatDay == 1 && currentStaNo > arriveStaNo){
+            secondIndex = 3
+        }
+        return secondIndex
+    }
+
 
 
 
