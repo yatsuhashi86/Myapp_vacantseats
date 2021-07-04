@@ -27,11 +27,8 @@ data class usersInfo(
 
 //二画面目に持っていくデータを格納するdata classを作る
 data class secondScreenInfo (
-    val currentSta: String,
-    val arriveSta: String,
-    val currentTime: Int,
-    val arriveTime: Int,
     val transferSta: MutableList<String>,
+    val transferTime: MutableList<Int>,
     val useLine: MutableList<String>
 )
 
@@ -65,7 +62,6 @@ class MainActivity : AppCompatActivity() {
 
         var isItArrive = -1 //検索が出発時刻でのものか到着時刻のものなのか判定
         var whatDay = -1 //平日か土休日か
-        var secondIndex = -1 //時刻表データの二つ目のListのindex
 
         fun onRadioButtonClicked(view: View) {
             if (view is RadioButton) {
@@ -102,17 +98,30 @@ class MainActivity : AppCompatActivity() {
             //ここに画面遷移の実装をする
             //たぶんアルゴリズムもここ
             val info = getInfo()
-            var secondIndex = -1
+            val stationsList = mutableListOf<Int>()
+            stationsList.add(info.currentStaNo)
+            val linesList = mutableListOf<Int>()
+            linesList.add(info.currentLineNo)
+            val timesList = mutableListOf<Int>()
                 //どの時刻表データを使うかの選定
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
-                secondIndex = decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo)
+                stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo))
             } else {
                 //todo
                 //ここは二路線のうちはこれでいいけど拡張したらダイクストラを使ったコードにする必要がある。
+                //ここマジでヤバイ。乗り換え駅が新長田しかない前提、やばすぎ
                 if (info.currentLineNo == 0 && info.currentStaNo == 0){ //新長田駅は西神線でもあるから目的駅が西神線ならそっちにする
-                    secondIndex = decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo)
+                    stationsList.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
+                    linesList.drop(0)
+                    linesList.add(info.arriveLineNo)
                 } else if (info.currentLineNo == 0){
-
+                    stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, 0))
+                    stationsList.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
+                    linesList.add(info.arriveLineNo)
+                } else {
+                    stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, 8))
+                    stationsList.add(decideSecondIndex(whatDay, 0, info.arriveStaNo))
+                    linesList.add(info.arriveLineNo)
                 }
             }
             //todo
@@ -123,6 +132,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //出発駅のインデックスと到着駅のインデックスから判断。乗り換えあるなら路線を合わせる必要あり
     private fun decideSecondIndex(whatDay: Int, currentStaNo: Int, arriveStaNo: Int): Int {
         var secondIndex = -1
         if (whatDay == 0 && currentStaNo < arriveStaNo){
