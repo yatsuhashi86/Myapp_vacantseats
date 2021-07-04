@@ -100,28 +100,38 @@ class MainActivity : AppCompatActivity() {
             val info = getInfo()
             val stationsList = mutableListOf<Int>()
             stationsList.add(info.currentStaNo)
+            val directAndDay = mutableListOf<Int>()
             val linesList = mutableListOf<Int>()
             linesList.add(info.currentLineNo)
             val timesList = mutableListOf<Int>()
                 //どの時刻表データを使うかの選定
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
-                stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo))
+                directAndDay.add(decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo))
+                stationsList.add(info.arriveStaNo)
             } else {
                 //todo
                 //ここは二路線のうちはこれでいいけど拡張したらダイクストラを使ったコードにする必要がある。
                 //ここマジでヤバイ。乗り換え駅が新長田しかない前提、やばすぎ
                 if (info.currentLineNo == 0 && info.currentStaNo == 0){ //新長田駅は西神線でもあるから目的駅が西神線ならそっちにする
-                    stationsList.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
-                    linesList.drop(0)
+                    directAndDay.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
                     linesList.add(info.arriveLineNo)
+                    stationsList.drop(0)
+                    stationsList.add(8)
+                    stationsList.add(info.arriveStaNo)
                 } else if (info.currentLineNo == 0){
-                    stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, 0))
-                    stationsList.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
+                    directAndDay.add(decideSecondIndex(whatDay, info.currentStaNo, 0))
+                    directAndDay.add(decideSecondIndex(whatDay, 8, info.arriveStaNo))
                     linesList.add(info.arriveLineNo)
+                    stationsList.add(0)
+                    stationsList.add(8)
+                    stationsList.add(info.arriveStaNo)
                 } else {
-                    stationsList.add(decideSecondIndex(whatDay, info.currentStaNo, 8))
-                    stationsList.add(decideSecondIndex(whatDay, 0, info.arriveStaNo))
+                    directAndDay.add(decideSecondIndex(whatDay, info.currentStaNo, 8))
+                    directAndDay.add(decideSecondIndex(whatDay, 0, info.arriveStaNo))
                     linesList.add(info.arriveLineNo)
+                    stationsList.add(8)
+                    stationsList.add(0)
+                    stationsList.add(info.arriveStaNo)
                 }
             }
             //todo
