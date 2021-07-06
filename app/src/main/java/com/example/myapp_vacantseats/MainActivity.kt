@@ -17,8 +17,7 @@ data class StationInfo(
 )
 
 data class usersInfo(
-    val timeOfHour: Int,
-    val timeOfMinutes: Int,
+    val time: Int,
     val currentStaNo: Int,
     val arriveStaNo: Int,
     val currentLineNo: Int,
@@ -100,11 +99,11 @@ class MainActivity : AppCompatActivity() {
             val info = getInfo()
             val stationsList = mutableListOf<Int>()
             stationsList.add(info.currentStaNo)
-            val directAndDay = mutableListOf<Int>()
+            val directAndDay = mutableListOf<Int>()//二つ目のindex
             val linesList = mutableListOf<Int>()
-            linesList.add(info.currentLineNo)
+            linesList.add(info.currentLineNo)//一つ目のindex
             val timesList = mutableListOf<Int>()
-                //どの時刻表データを使うかの選定
+            //どの時刻表データを使うかの選定
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
                 directAndDay.add(decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo))
                 stationsList.add(info.arriveStaNo)
@@ -135,8 +134,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             //todo
+            //時刻表はもう確定してる
             //時間から最適な電車を探す
-
 
 
         }
@@ -192,6 +191,7 @@ class MainActivity : AppCompatActivity() {
         val arriveSta = enterEndSta.text.toString()
         val hour = jikann.text.toString().toInt()
         val minute = hun.text.toString().toInt()
+        val time = (hour.toString() + minute.toString()).toInt()
 
 
 
@@ -222,8 +222,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         return usersInfo(
-            timeOfHour = hour,
-            timeOfMinutes = minute,
+            time = time,
             currentStaNo = currentStaNo,
             arriveStaNo = arriveStaNo,
             currentLineNo = currentLine,
