@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 when (view.getId()) {
                     R.id.startTimeOfButton->
                         if (checked) {
-                            isItArrive = 0
+                            isItArrive = 0//出発時刻なら0
                         }
                     R.id.endTimeOfButton->
                         if (checked) {
@@ -137,7 +137,6 @@ class MainActivity : AppCompatActivity() {
             //時刻表はもう確定してる
             //時間から最適な電車を探す
 
-
         }
     }
 
@@ -154,6 +153,38 @@ class MainActivity : AppCompatActivity() {
             secondIndex = 3
         }
         return secondIndex
+    }
+
+    //時刻表データからどの電車にのるか判断する
+    //dataOfTimeTableの三つ目のindexをlistにしたものを返す
+    //firstIndexには路線情報、secondIndexには向きと曜日の情報、stationsには乗り降りする駅の情報が入る。
+    //乗り降りする駅の数は路線の倍あるからfirstIndexｔとsecondIndexは半分にする
+    private fun decideTrain(time: Int, currentOrArrive: Int, timeTable: MutableList<MutableList<MutableList<StationInfo>>>, stations: MutableList<Int>,
+                            firstIndex: MutableList<Int>, secondIndex: MutableList<Int>): MutableList<Int>{
+        val returnIndex = mutableListOf<Int>()
+        var timeOfTrain = time
+        val numberOfTrains = timeTable.size
+        val numberOfToRide = stations.size
+        if (currentOrArrive == 0){
+            for (i in 0 until numberOfToRide step 2){
+                for (j in 0 until numberOfTrains){
+                    if (timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]] > timeOfTrain){
+                        returnIndex.add(j)
+                        timeOfTrain = timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i+1]] //到着駅（乗換駅）の時間に変えた
+                    }
+                }
+            }
+        } else {
+            for (i in numberOfToRide downTo 0 step 2){
+                for (j in numberOfTrains downTo 0){
+                    if (timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]] < timeOfTrain){
+                        returnIndex.add(j)
+                        timeOfTrain = timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i-1]] //到着駅（乗換駅）の時間に変えた
+                    }
+                }
+            }
+        }
+        return returnIndex
     }
 
 
