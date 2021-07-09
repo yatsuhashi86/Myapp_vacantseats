@@ -92,17 +92,16 @@ class MainActivity : AppCompatActivity() {
         onRadioButtonClicked(RadioButtonOfWeekDayOrWeekEnd)
 
         val buttonSearch = findViewById<Button>(R.id.searchStart)
+        //たぶんアルゴリズムもここ
         buttonSearch.setOnClickListener{
             //todo
             //ここに画面遷移の実装をする
-            //たぶんアルゴリズムもここ
             val info = getInfo()
             val stationsList = mutableListOf<Int>()
             stationsList.add(info.currentStaNo)
             val directAndDay = mutableListOf<Int>()//二つ目のindex
             val linesList = mutableListOf<Int>()
             linesList.add(info.currentLineNo)//一つ目のindex
-            val timesList = mutableListOf<Int>()
             //どの時刻表データを使うかの選定
             if (info.currentLineNo == info.arriveLineNo){ //出発駅と到着駅が同じ路線
                 directAndDay.add(decideSecondIndex(whatDay, info.currentStaNo, info.arriveStaNo))
@@ -136,7 +135,16 @@ class MainActivity : AppCompatActivity() {
             //todo
             //時刻表はもう確定してる
             //時間から最適な電車を探す
-
+            val timesList = decideTrain(info.time, isItArrive, dataOfTimeTable, stationsList, linesList, directAndDay)//これがsecondScreenInfoのtransferTime
+            val stationsName = mutableListOf<String>() //文字列の情報がgetInfoにしかないことに今気づいた。secondInfoのtransferTime
+            val linesName = mutableListOf<String>() //secondInfoのuseLineやけど、ごり押し。路線増えたらどうするねん
+            for (i in linesList){
+                if (i == 0){
+                    linesName.add("神戸市営地下鉄海岸線")
+                } else if (i == 1) {
+                    linesName.add("神戸市営地下鉄西神線")
+                }
+            }
         }
     }
 
@@ -169,8 +177,9 @@ class MainActivity : AppCompatActivity() {
             for (i in 0 until numberOfToRide step 2){
                 for (j in 0 until numberOfTrains){
                     if (timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]] > timeOfTrain){
-                        returnIndex.add(j)
+                        returnIndex.add(timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]])
                         timeOfTrain = timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i+1]] //到着駅（乗換駅）の時間に変えた
+                        returnIndex.add(timeOfTrain)
                     }
                 }
             }
@@ -178,8 +187,9 @@ class MainActivity : AppCompatActivity() {
             for (i in numberOfToRide downTo 0 step 2){
                 for (j in numberOfTrains downTo 0){
                     if (timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]] < timeOfTrain){
-                        returnIndex.add(j)
+                        returnIndex.add(timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i]])
                         timeOfTrain = timeTable[firstIndex[i/2]][secondIndex[i/2]][j].departureTimes[stations[i-1]] //到着駅（乗換駅）の時間に変えた
+                        returnIndex.add(timeOfTrain)
                     }
                 }
             }
