@@ -24,11 +24,18 @@ data class usersInfo(
     val arriveLineNo: Int
 )
 
+//二画面目にもデータはいるくない？？三画面目まであるんやで
+data class useData(
+    val useLines: MutableList<Int>,
+    val useStations: MutableList<Int>
+)
+
 //二画面目に持っていくデータを格納するdata classを作る
 data class secondScreenInfo (
     val transferSta: MutableList<String>,
     val transferTime: MutableList<Int>,
-    val useLine: MutableList<String>
+    val useLine: MutableList<String>,
+    val useData: useData
 )
 
 
@@ -138,13 +145,28 @@ class MainActivity : AppCompatActivity() {
             val timesList = decideTrain(info.time, isItArrive, dataOfTimeTable, stationsList, linesList, directAndDay)//これがsecondScreenInfoのtransferTime
             val stationsName = mutableListOf<String>() //文字列の情報がgetInfoにしかないことに今気づいた。secondInfoのtransferTime
             val linesName = mutableListOf<String>() //secondInfoのuseLineやけど、ごり押し。路線増えたらどうするねん
+            val usedata = useData(linesList, stationsList)
+
+            val staKaiganList = mutableListOf("新長田", "駒ヶ林", "苅藻", "御崎公園", "和田岬", "中央市場前", "ハーバーランド", "みなと元町", "旧居留地・大丸前", "三宮・花時計前")
+            val staSeisinList = mutableListOf("西神中央", "西神南", "伊川谷", "学園都市", "総合運動公園", "名谷", "妙法寺", "板宿", "新長田", "長田", "上沢", "湊川公園", "大倉山", "県庁前", "三宮", "新神戸", "谷上")
+            var flag = 0
             for (i in linesList){
                 if (i == 0){
                     linesName.add("神戸市営地下鉄海岸線")
+                    stationsName.add(staKaiganList[stationsList[flag]])
+                    flag++
+                    stationsName.add(staKaiganList[stationsList[flag]])
                 } else if (i == 1) {
                     linesName.add("神戸市営地下鉄西神線")
+                    stationsName.add(staSeisinList[stationsList[flag]])
+                    flag++
+                    stationsName.add(staSeisinList[stationsList[flag]])
                 }
+                flag++
             }
+            //これで画面遷移に必要なデータがそろった
+            //神戸市営地下鉄しか使えない酷いコード
+            val toSecond = secondScreenInfo(stationsName, timesList, linesName, usedata)
         }
     }
 
